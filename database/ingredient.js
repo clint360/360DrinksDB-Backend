@@ -28,4 +28,4 @@ const Ingredient = sequelize.define(
   }
 );
 
-module.exports = Drink;
+module.exports = Ingredient;

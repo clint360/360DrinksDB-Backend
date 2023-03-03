@@ -40,5 +40,3 @@ router.patch("/ingredients/:id", async function (req, res) {
   });
   res.send(ingredient);
 });
-
-module.exports = router;

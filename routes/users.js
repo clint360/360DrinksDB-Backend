@@ -1,16 +1,13 @@
-var express = require("express");
-const { Op, where } = require("sequelize");
-const User = require("../database/user");
-var router = express.Router();
-/* GET users listing. */
-router.get("/", async function (req, res) {
-  const users = await User.findAll();
+const express = require("express");
+const Drink = require("../models/drink");
+const User = require("../models/users");
+const router = express.Router();
+
+router.get("/", async function (_, res) {
+  const users = await User.findAll({ include: Drink });
   res.send(users);
 });
-router.get("/:id", async function (req, res) {
-  const users = await User.findByPk(req.params.id);
-  res.send(users);
-});
+
 router.post("/", async function (req, res) {
   const { firstName, lastName, emailAddress, phone, password } = req.body;
   const user = await User.create({
@@ -19,39 +16,35 @@ router.post("/", async function (req, res) {
     emailAddress,
     phone,
     password,
-    apikey: Date.now(),
-  });
-  res.send(user);
-});
-router.put("/:id", async function (req, res) {
-  const { firstName, lastName, emailAddress, phone, password } =req.body;
-  const user = await User.update({
-    firstName,
-    lastName,
-    emailAddress,
-    phone,
-    password,
-  },{
-    where:{
-      id:req.params.id
-    }
-  });
-  res.send(user);
-});
-router.patch("/:id", async function (req, res) {
-  const { firstName, lastName, emailAddress, phone, password } =req.body;
-  const user = await User.update({
-    firstName,
-    lastName,
-    emailAddress,
-    phone,
-    password,
-  },{
-    where:{
-      id:req.params.id
-    }
+    apiKey: Date.now(),
   });
   res.send(user);
 });
 
-module.exports = router 
+router.get("/:id", async function (req, res) {
+  const user = await User.findByPk(req.params.id);
+  res.send(user);
+});
+
+router.put("/:id", async function (req, res) {
+  const { firstName, lastName, emailAddress, phone, password } = req.body;
+  if (firstName && lastName && emailAddress && phone && password) {
+    await User.update(req.body, { where: { id: req.params.id } });
+    const user = await User.findByPk(req.params.id);
+    res.send(user);
+  }
+  res.send({ message: "all feild required" });
+});
+
+router.patch("/:id", async function (req, res) {
+  await User.update(req.body, { where: { id: req.params.id } });
+  const user = await User.findByPk(req.params.id);
+  res.send(user);
+});
+
+router.delete("/:id", async function (req, res) {
+  await User.destroy({ where: { id: req.params.id } });
+  res.send({ status: "success" });
+});
+
+module.exports = router;

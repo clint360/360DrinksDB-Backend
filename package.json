@@ -1,20 +1,22 @@
 {
-  "name": "drinks",
-  "version": "0.0.0",
-  "private": true,
+  "name": "server",
+  "version": "1.0.0",
+  "description": "A simple crud express, sequelize, mysql server",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "test": "npm start"
   },
+  "keywords": [
+    "mysql2",
+    "sequelize",
+    "express"
+  ],
+  "author": "clint360",
+  "license": "MIT",
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "express-generator": "^4.16.1",
-    "http-errors": "~1.6.3",
-    "jade": "^1.9.2",
-    "morgan": "~1.9.1",
-    "mysql2": "^3.1.2",
-    "nodemon": "^2.0.21",
+    "mysql2": "^3.2.0",
     "sequelize": "^6.29.0"
   }
 }

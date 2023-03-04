@@ -1,42 +1,41 @@
-var express = require("express");
-const { Op, where } = require("sequelize");
-const Ingredient = require("../database/ingredient");
-var router = express.Router();
+const express = require("express");
+const Category = require("../models/category");
+const router = express.Router();
 
-router.get("/ingredients", async function (req, res) {
-  const ingredients = await Ingredient.findAll();
-  res.send(ingredients);
+router.get("/", async (req, res) => {
+  const category = await Category.findAll();
+  res.send(category);
 });
-router.get("/ingredients/:id", async function (req, res) {
-  const ingredients = await Ingredient.findByPk(req.params.id);
-  res.send(ingredients);
+
+router.post("/", async (req, res) => {
+  const category = await Category.create(req.body);
+  res.send(category);
 });
-router.post("/ingredients/", async function (req, res) {
-  const { name } = req.body;
-  const ingredient = await Ingredient.create({
-    name
-  });
-  res.send(ingredient);
+
+router.get("/:id", async (req, res) => {
+  const category = await Category.findByPk(req.params.id);
+  res.send(category);
 });
-router.put("/ingredients/:id", async function (req, res) {
-  const { name } = req.body;
-  const ingredient = await Ingredient.update({
-    name
-  },{
-    where:{
-      id:req.params.id
-    }
-  });
-  res.send(ingredient);
+
+router.put("/:id", async (req, res) => {
+  const { name, description } = req.body;
+  if (name && description) {
+    await Category.update(req.body, { where: { id: req.params.id } });
+    const category = await Category.findByPk(req.params.id);
+    res.send(category);
+  }
+  res.send({ message: "validation failed!" });
 });
-router.patch("/ingredients/:id", async function (req, res) {
-  const { name } =req.body;
-  const ingredient = await Ingredient.update({
-    name
-  },{
-    where:{
-      id:req.params.id
-    }
-  });
-  res.send(ingredient);
+
+router.patch("/:id", async (req, res) => {
+  await Category.update(req.body, { where: { id: req.params.id } });
+  const category = await Category.findByPk(req.params.id);
+  res.send(category);
 });
+
+router.delete("/:id", async (req, res) => {
+  Category.destroy({ where: { id: req.params.id } });
+  res.send({ status: "success" });
+});
+
+module.exports = router;

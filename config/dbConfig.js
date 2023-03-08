@@ -4,7 +4,7 @@ const { Sequelize, DataTypes } = require("sequelize")
   HOST: 'localhost',
   USER: 'root',
   PASSWORD: '',
-  DB: 'drink',
+  DB: 'drinks_db',
   dialect: 'mysql',
   pool: {
     max: 5,

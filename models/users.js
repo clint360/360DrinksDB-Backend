@@ -15,10 +15,14 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       unique: true,
     },
+    isAdmin: {
+       type: DataTypes.BOOLEAN
+    },
     phone: DataTypes.STRING,
     apiKey: DataTypes.STRING,
     password: DataTypes.STRING,
   },
+    
   {
     timestamps: true,
     paranoid: true,
